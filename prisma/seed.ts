@@ -9,6 +9,7 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // Supabase pooler uses self-signed cert
 });
 
 const adapter = new PrismaPg(pool);
@@ -54,7 +55,7 @@ async function main() {
       author: 'Karla Duarte Ferreira',
       publish_date: '28 de Dezembro de 2024',
       category: 'Economia',
-      image_url: 'https://picsum.photos/seed/econ1/800/450',
+      image_url: 'https://unsplash.com/photos/mu3OP-BoL8I/download?force=true&w=1600',
     },
   });
 

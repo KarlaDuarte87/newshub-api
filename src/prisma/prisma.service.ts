@@ -10,7 +10,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     if (!url) {
       throw new Error('DATABASE_URL não definida');
     }
-    const pool = new Pool({ connectionString: url });
+    const pool = new Pool({
+      connectionString: url,
+      ssl: { rejectUnauthorized: false }, // Supabase pooler uses self-signed cert
+    });
     const adapter = new PrismaPg(pool);
     super({ adapter: adapter as any });
   }
