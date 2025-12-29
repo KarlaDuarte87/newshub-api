@@ -3,13 +3,23 @@ import { Pool } from 'pg';
 import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
 
-if (!process.env.DATABASE_URL) {
+const url = process.env.DATABASE_URL;
+if (!url) {
   throw new Error('DATABASE_URL não está definida no arquivo .env');
 }
 
+const parsedUrl = new URL(url);
+const sslMode = parsedUrl.searchParams.get('sslmode');
+const isLocalHost =
+  ['localhost', '127.0.0.1'].includes(parsedUrl.hostname) ||
+  parsedUrl.hostname.endsWith('.local');
+const useSSL =
+  sslMode === 'require' ||
+  (sslMode !== 'disable' && sslMode !== 'false' && !isLocalHost);
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }, // Supabase pooler uses self-signed cert
+  connectionString: url,
+  ssl: useSSL ? { rejectUnauthorized: false } : false,
 });
 
 const adapter = new PrismaPg(pool);
@@ -35,7 +45,7 @@ async function main() {
         <p class="mb-4">Entretanto, o debate sobre ética e regulação continua intenso no Congresso Nacional, com novas diretrizes previstas para serem votadas no próximo trimestre.</p>
       `,
       author: 'Karla Duarte Ferreira',
-      publish_date: '27 de Dezembro de 2024',
+      publish_date: '27 de Dezembro de 2025',
       category: 'Tecnologia',
       image_url: 'https://images.unsplash.com/photo-1746286720984-72f386e1872e?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
@@ -53,7 +63,7 @@ async function main() {
         <p class="mb-4">Apesar dos números positivos, o Banco Central mantém a cautela em relação à taxa de juros, monitorando de perto a inflação dos alimentos.</p>
       `,
       author: 'Karla Duarte Ferreira',
-      publish_date: '28 de Dezembro de 2024',
+      publish_date: '28 de Dezembro de 2025',
       category: 'Economia',
       // Foto premium do Unsplash para Economia
       image_url: 'https://plus.unsplash.com/premium_photo-1668014840685-a3f9b2d14e01?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
@@ -61,6 +71,28 @@ async function main() {
   });
 
   const article3 = await prisma.posts.create({
+    data: {
+      slug: 'projeto-viaable-malta-reabilitacao-inclusiva',
+      title: 'ViaAble: A união entre reabilitação e afeto para famílias especiais em Malta',
+      summary: 'Fundado por Jana Laurová e com a expertise da educadora Ana Elisa Tubino, o projeto oferece estadias de reabilitação que priorizam a dignidade e o bem-estar emocional.',
+      content: `
+        <p class="mb-4">O projeto ViaAble, que hoje atua em Malta, nasceu da resiliência de sua fundadora, <strong>Jana Laurová</strong>. Mãe de duas crianças com autismo e sobrevivente de um câncer, Jana transformou sua experiência pessoal de isolamento e rejeição em uma rede de apoio global. Com uma trajetória que inclui prêmios da OTAN e vasta experiência médica militar, ela traz para o projeto um rigor profissional unido a uma sensibilidade rara.</p>
+        
+        <p class="mb-4">Ao lado da educadora brasileira <strong>Ana Elisa Tubino</strong>, a ViaAble oferece mais do que simples viagens: são estadias de reabilitação e vivências personalizadas. "Ajudamos as famílias a vivenciar o descanso e a segurança que merecem, garantindo que nunca se sintam sozinhas em seus desafios", explica a equipe. O foco é criar um ambiente onde as barreiras da deficiência desapareçam perante o direito à alegria.</p>
+        
+        <p class="mb-4">Em Malta, o projeto se destaca pela <strong>abordagem individualizada</strong>. Cada criança tem seu ritmo respeitado durante as terapias e passeios, contando com supervisão médica e assistência profissional. O objetivo é permitir que os pais finalmente relaxem, enquanto as crianças ganham coragem e autonomia em um cenário mediterrâneo acolhedor.</p>
+
+        <p class="mb-4">"Acreditamos que o apoio transforma vidas", afirma Jana. A ViaAble não apenas organiza viagens, mas constrói uma comunidade onde a diferença é tratada com dignidade. Para as famílias, o resultado é um retorno para casa com energia renovada e a certeza de que o mundo pode, sim, ser um lugar inclusivo.</p>
+      `,
+      author: 'Equipe ViaAble',
+      publish_date: '29 de Dezembro de 2025',
+      category: 'Projetos Sociais',
+      image_url:
+        'https://viaable.eu/storage/app/resources/resize/300_0_0_0_crop/img_32b452dd0cc406d32afaf76432826022.webp',
+    },
+  });
+
+  const article4 = await prisma.posts.create({
     data: {
       slug: 'sustentabilidade-cidades-inteligentes',
       title: 'Cidades Inteligentes: Como a urbanização sustentável está mudando a vida no Brasil',
@@ -71,14 +103,14 @@ async function main() {
         <p class="mb-4">Especialistas defendem que o investimento em infraestrutura verde é o caminho mais curto para melhorar a qualidade de vida nas metrópoles.</p>
       `,
       author: 'Karla Duarte Ferreira',
-      publish_date: '26 de Dezembro de 2024',
+      publish_date: '26 de Dezembro de 2025',
       category: 'Sustentabilidade',
-      image_url: 'https://picsum.photos/seed/city1/800/450',
+      image_url: 'https://plus.unsplash.com/premium_photo-1688678097388-a0c77ea9ace1?q=80&w=846&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
   });
 
   console.log('Seed concluído!');
-  console.log('Artigos criados:', { article1, article2, article3 });
+  console.log('Artigos criados:', { article1, article2, article3, article4 });
 }
 
 main()
