@@ -13,7 +13,7 @@ export class PostsService {
     });
 
     return posts.map((post) => ({
-      id: post.id,
+      id: String(post.id),
       slug: post.slug,
       title: post.title,
       summary: post.summary,
@@ -35,15 +35,15 @@ export class PostsService {
     }
 
     return {
-      id: post.id,
+      id: String(post.id),
       slug: post.slug,
       title: post.title,
       summary: post.summary,
       content: post.content,
       author: post.author,
       publishDate: post.publish_date,
-    category: post.category,
-      image_url: post.image_url,
+      category: post.category,
+      imageUrl: post.image_url,
     };
   }
 }
