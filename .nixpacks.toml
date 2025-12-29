@@ -1,0 +1,13 @@
+[phases.setup]
+# Use Node.js 22 to satisfy Prisma 7 requirements during install/build
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmd = "npm ci"
+
+[phases.build]
+cmd = "npm run build"
+
+[start]
+cmd = "npm run start:prod"
+
