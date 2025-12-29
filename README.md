@@ -1,98 +1,264 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NewsHub API - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST desenvolvida em NestJS para gerenciamento de artigos/notícias, construída como parte do desafio técnico.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Tecnologias Utilizadas
 
-## Description
+- **NestJS 11** - Framework Node.js progressivo
+- **TypeScript** - Tipagem estática
+- **Prisma 7** - ORM moderno
+- **PostgreSQL 16** - Banco de dados relacional
+- **Jest** - Framework de testes
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 📋 Pré-requisitos
 
-## Project setup
+- Node.js 18+
+- npm ou yarn
+- Docker e Docker Compose (para banco de dados)
+- PostgreSQL 16+ (se não usar Docker)
+
+## 🛠️ Instalação e Execução
+
+### 1. Configuração do Banco de Dados
+
+O projeto inclui um `docker-compose.yml` para facilitar a configuração:
 
 ```bash
-$ npm install
+docker-compose up -d
 ```
 
-## Compile and run the project
+Isso irá iniciar um container PostgreSQL na porta 5434.
+
+### 2. Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL="postgresql://gpcom:gpcom@localhost:5434/gpcom?schema=public"
+```
+
+### 3. Instalação e Setup
 
 ```bash
-# development
-$ npm run start
+# Instale as dependências
+npm install
 
-# watch mode
-$ npm run start:dev
+# Gere o Prisma Client
+npm run prisma:generate
 
-# production mode
-$ npm run start:prod
+# Execute as migrações
+npm run prisma:migrate
+
+# Popule o banco com dados iniciais (seed)
+npm run prisma:seed
 ```
 
-## Run tests
+### 4. Executar a API
 
 ```bash
-# unit tests
-$ npm run test
+# Modo desenvolvimento (watch mode)
+npm run start:dev
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Modo produção
+npm run build
+npm run start:prod
 ```
 
-## Deployment
+A API estará disponível em: `http://localhost:3001`
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+## 📦 Scripts Disponíveis
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- `npm run start:dev` - Inicia em modo desenvolvimento com watch
+- `npm run build` - Compila o projeto
+- `npm run start:prod` - Inicia em modo produção
+- `npm run lint` - Executa o linter
+- `npm run test` - Executa testes unitários
+- `npm run test:cov` - Executa testes com coverage
+- `npm run prisma:generate` - Gera o Prisma Client
+- `npm run prisma:migrate` - Executa migrações
+- `npm run prisma:seed` - Popula o banco com dados iniciais
+
+## 🏗️ Estrutura do Projeto
+
+```
+src/
+├── modules/
+│   └── posts/             # Módulo de posts
+│       ├── posts.controller.ts    # Controller REST
+│       ├── posts.service.ts       # Lógica de negócio
+│       ├── posts.module.ts        # Módulo NestJS
+│       └── *.spec.ts              # Testes unitários
+├── prisma/
+│   ├── prisma.service.ts  # Serviço Prisma
+│   └── prisma.module.ts   # Módulo Prisma
+├── app.module.ts          # Módulo raiz
+└── main.ts                # Entry point
+
+prisma/
+├── schema.prisma          # Schema do banco de dados
+├── seed.ts                # Script de seed
+└── migrations/            # Migrações do banco
+```
+
+## 🎨 Decisões de Arquitetura
+
+### Escolha do NestJS
+Optei pelo NestJS porque:
+- Arquitetura modular e escalável
+- TypeScript nativo
+- Decorators e dependency injection facilitam a organização
+- Padrões sólidos de desenvolvimento (SOLID)
+- Excelente para APIs REST
+
+### Prisma como ORM
+Escolhido por:
+- Type-safe queries com TypeScript
+- Migrations automáticas
+- Developer experience superior
+- Schema-first approach (schema.prisma)
+- Suporte moderno a PostgreSQL
+
+### PostgreSQL
+Banco relacional escolhido por:
+- Robusto e confiável
+- Excelente performance
+- Suporte completo a relacionamentos
+- Adequado para conteúdo estruturado
+
+### Estrutura Modular
+- Separação por domínios (posts)
+- Controller → Service → Repository (Prisma)
+- Testes unitários por módulo
+- Fácil adicionar novos módulos
+
+## 📊 Modelo de Dados
+
+O schema Prisma define o modelo `posts`:
+
+```prisma
+model posts {
+  id          Int       @id @default(autoincrement())
+  slug        String?   @unique
+  title       String
+  summary     String?
+  content     String    @db.Text
+  author      String?
+  category    String?
+  image_url   String?
+  publish_date String?
+  createdAt   DateTime  @default(now())
+  changedAt   DateTime  @updatedAt
+}
+```
+
+## 🔌 Endpoints da API
+
+### GET /posts
+Retorna lista de todos os posts ordenados por data de publicação (mais recentes primeiro).
+
+**Resposta:**
+```json
+[
+  {
+    "id": "1",
+    "slug": "exemplo-artigo",
+    "title": "Título do Artigo",
+    "summary": "Resumo do artigo...",
+    "content": "<p>Conteúdo HTML...</p>",
+    "author": "Nome do Autor",
+    "publishDate": "27 de Dezembro de 2024",
+    "category": "Tecnologia",
+    "imageUrl": "https://..."
+  }
+]
+```
+
+### GET /posts/:slug
+Retorna um post específico pelo slug.
+
+**Resposta:**
+```json
+{
+  "id": "1",
+  "slug": "exemplo-artigo",
+  "title": "Título do Artigo",
+  "summary": "Resumo do artigo...",
+  "content": "<p>Conteúdo HTML...</p>",
+  "author": "Nome do Autor",
+  "publishDate": "27 de Dezembro de 2024",
+  "category": "Tecnologia",
+  "imageUrl": "https://..."
+}
+```
+
+**Erro 404:** Se o slug não for encontrado, retorna:
+```json
+{
+  "statusCode": 404,
+  "message": "Artigo com slug \"exemplo\" não encontrado"
+}
+```
+
+## 🔒 CORS
+
+A API está configurada para aceitar requisições de qualquer origem em desenvolvimento. Em produção, deve-se configurar as origens permitidas no `main.ts`.
+
+## 🧪 Testes
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Executar todos os testes
+npm run test
+
+# Executar com coverage
+npm run test:cov
+
+# Watch mode
+npm run test:watch
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Testes unitários implementados para:
+- **PostsController** - Endpoints GET /posts e GET /posts/:slug
+- **PostsService** - Lógica de negócio, formatação de dados e tratamento de erros
+- Validação de retorno de dados no formato correto
+- Tratamento de NotFoundException quando post não existe
+- Mock do PrismaService para testes isolados
 
-## Resources
+## 📝 Seed (Dados Iniciais)
 
-Check out a few resources that may come in handy when working with NestJS:
+O script de seed cria 3 artigos de exemplo no banco de dados:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run prisma:seed
+```
 
-## Support
+Os dados incluem artigos sobre Tecnologia, Economia e Sustentabilidade.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🔧 Configuração do Banco de Dados
 
-## Stay in touch
+### Usando Docker (Recomendado)
+```bash
+docker-compose up -d
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Usando PostgreSQL Local
+1. Instale PostgreSQL 16+
+2. Crie um banco de dados
+3. Configure a `DATABASE_URL` no `.env`:
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_do_banco"
+```
 
-## License
+## 🚢 Deploy
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Para produção:
+1. Configure variáveis de ambiente adequadas
+2. Execute `npm run build`
+3. Execute `npm run start:prod`
+4. Certifique-se que o banco de dados está acessível
+
+## 📝 Notas Adicionais
+
+- A API usa Prisma com adapter PostgreSQL para melhor performance
+- Migrations são versionadas e versionadas no Git
+- CORS está habilitado para desenvolvimento local
+- Error handling padrão do NestJS para respostas consistentes
