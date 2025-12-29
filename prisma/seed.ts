@@ -55,7 +55,8 @@ async function main() {
       author: 'Karla Duarte Ferreira',
       publish_date: '28 de Dezembro de 2024',
       category: 'Economia',
-      image_url: 'https://unsplash.com/photos/mu3OP-BoL8I/download?force=true&w=1600',
+      // Foto premium do Unsplash para Economia
+      image_url: 'https://plus.unsplash.com/premium_photo-1668014840685-a3f9b2d14e01?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     },
   });
 
