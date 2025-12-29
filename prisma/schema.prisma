@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model posts {
+  id          Int       @id @default(autoincrement())
+  slug        String?   @unique @db.VarChar(256)
+  title       String    @db.VarChar(256)
+  summary     String?   @db.VarChar(500)
+  content     String    @db.Text
+  author      String?   @db.VarChar(256)
+  category    String?   @db.VarChar(64)
+  image_url   String?   @db.VarChar(512)
+  publish_date String?  @db.VarChar(64)
+  changedAt   DateTime  @default(now()) @updatedAt @db.Timestamp(0)
+  createdAt   DateTime  @default(now()) @db.Timestamp(0)
+
+  @@index([slug], map: "slug")
+  @@index([publish_date], map: "publish_date")
+}
