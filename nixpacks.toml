@@ -1,10 +1,10 @@
 [variables]
-# Force Node 22.12 (Prisma requires >=22.12 on 22.x line)
-NIXPACKS_NODE_VERSION = "22.12.0"
+# Force Node 24 (Prisma also supports 24.x)
+NIXPACKS_NODE_VERSION = "24.0.0"
 
 [phases.setup]
-# Use Node.js 22 to satisfy Prisma 7 requirements during install/build
-nixPkgs = ["nodejs_22"]
+# Use Node.js 24 to satisfy Prisma requirements
+nixPkgs = ["nodejs_24"]
 
 [phases.install]
 cmds = ["npm ci --omit=dev"]
