@@ -35,7 +35,10 @@ Crie um arquivo `.env` na raiz do projeto:
 
 ```env
 DATABASE_URL="postgresql://gpcom:gpcom@localhost:5434/gpcom?schema=public"
+DATABASE_SSL=false
 ```
+
+- `DATABASE_SSL=false` para conexões locais ou ambientes sem TLS obrigatório. Defina como `true` apenas se o provedor exigir TLS.
 
 ### 3. Instalação e Setup
 
